@@ -1,0 +1,63 @@
+Андрей Комаров
+ProcessLamportMutex
+#actions
+{1 SEND 2} 2, REQ, 1
+{2 SEND 1} 2, REQ, 1
+{1 SEND 2} 4, OK
+{2 SEND 1} 4, OK
+{1 SEND 2} 6, REL
+{1 SEND 2} 8, REQ, 7
+{2 SEND 1} 10, OK
+{2 SEND 1} 12, REQ, 11
+{2 SEND 1} 8, REL
+{1 SEND 2} 15, REL
+{1 SEND 2} 18, REQ, 17
+{1 SEND 2} 14, OK
+{2 SEND 1} 20, OK
+#process 1
+0 LockRequest
+40 {1 SEND 2} 2, REQ, 1
+80 {1 RCVD 2} 2, REQ, 1
+120 {1 SEND 2} 4, OK
+160 {1 RCVD 2} 4, OK
+200 Lock
+240 Unlock
+280 {1 SEND 2} 6, REL
+320 LockRequest
+360 {1 SEND 2} 8, REQ, 7
+560 {1 RCVD 2} 10, OK
+640 {1 RCVD 2} 12, REQ, 11
+680 {1 SEND 2} 14, OK
+720 Lock
+760 Unlock
+801 {1 SEND 2} 15, REL
+840 {1 RCVD 2} 8, REL
+880 LockRequest
+920 {1 SEND 2} 18, REQ, 17
+1040 {1 RCVD 2} 20, OK
+1080 Lock
+1120 Unlock
+1160 {1 SEND 2} 22, REL
+#process 2
+0 LockRequest
+40 {2 SEND 1} 2, REQ, 1
+80 {2 RCVD 1} 2, REQ, 1
+120 {2 SEND 1} 4, OK
+160 {2 RCVD 1} 4, OK
+320 {2 RCVD 1} 6, REL
+360 Lock
+400 Unlock
+440 {2 SEND 1} 8, REL
+480 {2 RCVD 1} 8, REQ, 7
+520 {2 SEND 1} 10, OK
+560 LockRequest
+600 {2 SEND 1} 12, REQ, 11
+841 {2 RCVD 1} 15, REL
+960 {2 RCVD 1} 18, REQ, 17
+1000 {2 SEND 1} 20, OK
+1040 {2 RCVD 1} 14, OK
+1080 Lock
+1120 Unlock
+1160 {2 SEND 1} 22, REL
+1200 LockRequest
+1240 {2 SEND 1} 24, REQ, 23
